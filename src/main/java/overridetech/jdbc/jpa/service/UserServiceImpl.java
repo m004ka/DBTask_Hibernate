@@ -1,53 +1,42 @@
 package overridetech.jdbc.jpa.service;
 
-import overridetech.jdbc.jpa.dao.UserDaoJDBCImpl;
+import overridetech.jdbc.jpa.dao.UserDaoHibernateImpl;
 import overridetech.jdbc.jpa.model.User;
-import overridetech.jdbc.jpa.util.Util;
-import java.sql.Connection;
-import java.sql.SQLException;
+
 import java.util.List;
 
 public class UserServiceImpl implements UserService {
 
-    private final Connection connection;
-    private final UserDaoJDBCImpl daoJDBC;
+
+    UserDaoHibernateImpl userDaoHibernate;
 
     public UserServiceImpl() {
-        connection = Util.getConnection();
-        daoJDBC = new UserDaoJDBCImpl(connection);
+
+        userDaoHibernate = new UserDaoHibernateImpl();
     }
 
     public void createUsersTable() {
-        daoJDBC.createUsersTable();
+        userDaoHibernate.createUsersTable();
     }
 
     public void dropUsersTable() {
-        daoJDBC.dropUsersTable();
+        userDaoHibernate.dropUsersTable();
     }
 
     public void saveUser(String name, String lastName, byte age) {
-        daoJDBC.saveUser(name, lastName, age);
+        userDaoHibernate.saveUser(name, lastName, age);
     }
 
     public void removeUserById(long id) {
-        daoJDBC.removeUserById(id);
+        userDaoHibernate.removeUserById(id);
     }
 
     public List<User> getAllUsers() {
-        return daoJDBC.getAllUsers();
+        return userDaoHibernate.getAllUsers();
     }
 
     public void cleanUsersTable() {
-        daoJDBC.cleanUsersTable();
+        userDaoHibernate.cleanUsersTable();
     }
 
-    public void closeConnection() {
-        try {
-            if (connection != null) {
-                connection.close();
-            }
-        } catch (SQLException e) {
-            System.err.println("Ошибка при закрытии соединения: " + e.getMessage());
-        }
-    }
 }
